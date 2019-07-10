@@ -64,7 +64,7 @@ ENDIF()
 
 # GC LIBRARY (static) only for binary output
 IF (${ESCARGOT_OUTPUT} STREQUAL "bin")
-    SET (GC_CFLAGS_COMMON "-g3 -fdata-sections -ffunction-sections -DHAVE_CONFIG_H -DESCARGOT -DIGNORE_DYNAMIC_LOADING -DGC_DONT_REGISTER_MAIN_STATIC_DATA -Wno-unused-variable")
+    SET (GC_CFLAGS_COMMON "-g3 -fdata-sections -ffunction-sections -DHAVE_CONFIG_H -DESCARGOT -DIGNORE_DYNAMIC_LOADING -DGC_DONT_REGISTER_MAIN_STATIC_DATA -Wno-unused-variable -DGC_THREADS -D_REENTRANT")
 
     IF (${ESCARGOT_MODE} STREQUAL "debug")
         SET (GC_CFLAGS_MODE "-O0 -DGC_DEBUG")
@@ -75,7 +75,7 @@ IF (${ESCARGOT_OUTPUT} STREQUAL "bin")
     SET (GC_CFLAGS "${GC_CFLAGS_COMMON} ${GC_CFLAGS_ARCH} ${GC_CFLAGS_MODE} $ENV{CFLAGS}")
     SET (GC_LDFLAGS "${GC_LDFLAGS_ARCH} ${GC_CFLAGS}")
 
-    SET (GC_CONFFLAGS_COMMON --enable-munmap --disable-parallel-mark --enable-large-config --disable-pthread --disable-threads)
+    SET (GC_CONFFLAGS_COMMON --enable-cplusplus   --enable-munmap --disable-parallel-mark --enable-large-config --enable-pthread --enable-threads=pthreads)
     IF (${ESCARGOT_MODE} STREQUAL "debug")
         SET (GC_CONFFLAGS_MODE --enable-debug --enable-gc-debug)
     ELSE()

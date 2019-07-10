@@ -17,12 +17,15 @@
  *  USA
  */
 
+#define GC_THREADS
+
 #include "Escargot.h"
 #include "runtime/VMInstance.h"
 #include "util/Vector.h"
 #include "runtime/Value.h"
 #include "parser/ScriptParser.h"
 #include "runtime/JobQueue.h"
+#include <pthread.h>
 
 #ifdef ESCARGOT_ENABLE_VENDORTEST
 namespace Escargot {
@@ -82,14 +85,26 @@ NEVER_INLINE bool eval(Escargot::Context* context, Escargot::String* str, Escarg
     return true;
 }
 
-int main(int argc, char* argv[])
+
+/* Old escargot main() method
+   The major differences is:
+   Heap initialize and finalize has been moved to the new main method
+   GC_stack_base  has been added too thread
+   because GC uses global variables.
+   During a garbage collection, all other thread are suspended.
+*/
+int escargot_Entry_Point(int argc, char* argv[])
 {
 #ifndef NDEBUG
     setbuf(stdout, NULL);
     setbuf(stderr, NULL);
 #endif
 
-    Escargot::Heap::initialize();
+    // GC global variable
+    GC_stack_base stack;
+    GC_get_stack_base(&stack);
+    GC_register_my_thread(&stack);
+
     Escargot::VMInstance* instance = new Escargot::VMInstance();
     Escargot::Context* context = new Escargot::Context(instance);
     Escargot::ExecutionState stateForInit(context);
@@ -162,11 +177,49 @@ int main(int argc, char* argv[])
     delete context;
     delete instance;
 
-    Escargot::Heap::finalize();
-
-    if (memStats) {
-        Escargot::Heap::printGCHeapUsage();
-    }
-
     return 0;
+}
+
+// basic thread function
+void *
+thread_function(void *param)
+{
+    int id = (int)(intptr_t)param;
+    printf("Thread (id: %d) started...\n", id);
+
+    // create arguments
+    char* argv[2] = {(char*) "escargot", (char*) "thread-example.js"};
+    // call the escargot entry point
+    escargot_Entry_Point(2, argv);
+
+    printf("Thread (id: %d) exited...\n", id);
+
+    return NULL;
+}
+
+// number of threads. Works withour error around with ~100-150 thread
+#define NUM_OF_THREADS 10
+//  new main function. Initializing the heap,creating the pthreads, finalizing the heap.
+int main(int argc, char* argv[])
+{
+  Escargot::Heap::initialize();
+
+  pthread_t threads[NUM_OF_THREADS];
+
+    /* Create the threads. */
+    for (int i = 0; i < NUM_OF_THREADS; i++) {
+        pthread_create(&threads[i], NULL, thread_function, (void*)(intptr_t)i);
+      }
+
+        for (int i = 0; i < NUM_OF_THREADS; i++) {
+       pthread_join(threads[i], NULL);
+   }
+
+   Escargot::Heap::finalize();
+
+/*   if (memStats) {
+       Escargot::Heap::printGCHeapUsage();
+   }*/
+
+  return 0;
 }

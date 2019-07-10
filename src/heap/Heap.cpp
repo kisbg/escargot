@@ -18,10 +18,8 @@
  */
 
 #include "Escargot.h"
-
 #include "Heap.h"
 #include "LeakChecker.h"
-
 #include <stdlib.h>
 
 namespace Escargot {
