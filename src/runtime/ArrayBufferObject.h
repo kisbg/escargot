@@ -149,7 +149,7 @@ public:
     void* operator new(size_t size);
     void* operator new[](size_t size) = delete;
 
-private:
+protected:
     Context* m_context;
     uint8_t* m_data;
     unsigned m_bytelength;
