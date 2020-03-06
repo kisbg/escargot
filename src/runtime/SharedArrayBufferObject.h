@@ -27,7 +27,6 @@ namespace Escargot {
 class SharedArrayBufferObject : public ArrayBufferObject {
 public:
     explicit SharedArrayBufferObject(ExecutionState& state);
-    void allocateBuffer(ExecutionState& state, size_t bytelength);
 
 
     virtual const char* internalClassProperty()
@@ -44,6 +43,9 @@ public:
     {
         return false;
     }
+    void detachArrayBuffer(ExecutionState& state);
+    void allocateBuffer(ExecutionState& state, size_t bytelength);
+
 };
 }
 

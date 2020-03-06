@@ -68,7 +68,7 @@ void ArrayBufferObject::attachBuffer(ExecutionState& state, void* buffer, size_t
     m_bytelength = bytelength;
 }
 
-void ArrayBufferObject::detachArrayBuffer(ExecutionState& state)
+ void ArrayBufferObject::detachArrayBuffer(ExecutionState& state)
 {
     if (m_data) {
         m_context->vmInstance()->platform()->onArrayBufferObjectDataBufferFree(m_context, this, m_data);
@@ -93,6 +93,11 @@ bool ArrayBufferObject::cloneBuffer(ExecutionState& state, ArrayBufferObject* sr
     allocateBuffer(state, cloneLength);
     fillData(srcBuffer->data() + srcByteOffset, cloneLength);
     return true;
+}
+
+Value ArrayBufferObject::getModifySetValueInBuffer(ExecutionState& state, Value* arrayBuffer, int , TypedArrayType elementType, int v, int op)
+{
+  return Value();
 }
 
 void* ArrayBufferObject::operator new(size_t size)

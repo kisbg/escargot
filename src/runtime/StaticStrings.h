@@ -341,6 +341,7 @@ namespace Escargot {
     F(alreadyCalled)              \
     F(values)                     \
     F(Reflect)                    \
+    F(Atomics)                    \
     F(ownKeys)                    \
     F(remainingElements)          \
     F(all)                        \
@@ -378,6 +379,17 @@ namespace Escargot {
     F(entries)                    \
     F(size)                       \
     F(add)                        \
+    F(and)                        \
+    F(compareExchange)            \
+    F(exchange)                   \
+    F(isLockFree)                 \
+    F(Load)                       \
+    F(Or)                         \
+    F(store)                      \
+    F(Sub)                        \
+    F(wait)                       \
+    F(notify)                     \
+    F(Xor)                        \
     F(Set)                        \
     F(WeakMap)                    \
     F(WeakSet)                    \

@@ -133,6 +133,8 @@ public:
         RELEASE_ASSERT_NOT_REACHED();
     }
 
+    Value getModifySetValueInBuffer(ExecutionState& state, Value* arrayBuffer, int , TypedArrayType elementType, int v, int op);
+
     bool isDetachedBuffer()
     {
         if (data() == NULL)

@@ -57,4 +57,8 @@ void SharedArrayBufferObject::allocateBuffer(ExecutionState& state, size_t bytel
     m_data = (uint8_t*)m_context->vmInstance()->platform()->onSharedArrayBufferObjectDataBufferMalloc(m_context, this, bytelength);
     m_bytelength = bytelength;
 }
+void SharedArrayBufferObject::detachArrayBuffer(ExecutionState& state)
+{
+  return;
+}
 };

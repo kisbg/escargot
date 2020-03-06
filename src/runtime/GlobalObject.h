@@ -113,6 +113,7 @@ public:
         , m_promisePrototype(nullptr)
         , m_proxy(nullptr)
         , m_reflect(nullptr)
+        , m_atomics(nullptr)
         , m_arrayBuffer(nullptr)
         , m_arrayBufferPrototype(nullptr)
         , m_sharedArrayBufferPrototype(nullptr)
@@ -193,6 +194,7 @@ public:
         installPromise(state);
         installProxy(state);
         installReflect(state);
+        installAtomics(state);
         installDataView(state);
         installTypedArray(state);
         installMap(state);
@@ -225,6 +227,7 @@ public:
     void installPromise(ExecutionState& state);
     void installProxy(ExecutionState& state);
     void installReflect(ExecutionState& state);
+    void installAtomics(ExecutionState& state);
     void installDataView(ExecutionState& state);
     void installTypedArray(ExecutionState& state);
     template <typename TA, int elementSize, typename TypeAdaptor>
@@ -830,6 +833,7 @@ private:
     FunctionObject* m_proxy;
 
     Object* m_reflect;
+    Object* m_atomics;
 
     FunctionObject* m_arrayBuffer;
     Object* m_arrayBufferPrototype;
